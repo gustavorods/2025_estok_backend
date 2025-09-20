@@ -12,7 +12,8 @@ async function getHistorical() {
         t.nome_tipo,
         m.nome_marca,
         i.validade,
-        COUNT(*) OVER(PARTITION BY p.nome_produto, t.nome_tipo, m.nome_marca) AS quantidade
+        COUNT(CASE WHEN s.nome_status = 'entrou' THEN 1 END) 
+            OVER(PARTITION BY p.nome_produto, t.nome_tipo, m.nome_marca) AS quantidade
     FROM historico h
     JOIN status s ON h.cod_status = s.cod_status
     JOIN item i ON h.cod_item = i.cod_item
