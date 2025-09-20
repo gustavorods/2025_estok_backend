@@ -9,10 +9,12 @@ app.use(express.json());
 
 // import routes 
 const iotRoutes = require('./routes/iotRoutes');
-const auth = require('./middlewares/auth')
+const productRoutes = require('./routes/productRoutes');
+const auth = require('./middlewares/auth');
 
 // Using router
-app.use('/api/estok', auth.checkApiKey, iotRoutes)
+app.use('/api/estok/iot', auth.checkApiKey, iotRoutes);
+app.use('/api/estok/product', auth.checkApiKey, productRoutes);
 
 // see server logs
 app.listen(port, () => {

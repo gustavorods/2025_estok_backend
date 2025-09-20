@@ -29,6 +29,6 @@ const pool = mysql.createPool({
 //     }
 // }
 
-testConnection();
+// testConnection();
 
 module.exports = pool;
