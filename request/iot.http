@@ -1,4 +1,4 @@
-POST http://localhost:3000/api/estok/get-epc
+POST http://localhost:3000/api/estok/iot/get-epc
 Content-Type: application/json
 x-api-key: AUTH_KEY
 
