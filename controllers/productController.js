@@ -1,14 +1,14 @@
 const productModel = require('../models/productModel');
 
-// Send all historical datas
-async function getHistoricalData(req, res) {
+// Send all history datas
+async function getHistoryData(req, res) {
     try{
-        const data = await productModel.getHistorical();
+        const data = await productModel.getHistory();
         res.status(200).send(data);
     } catch (error) {
-        console.error(`Error to get product historical. ${ERROR}`);
+        console.error(`Error to get product history. ${ERROR}`);
         res.status(500).send(`Internal server error`);
     }
 }
 
-module.exports = { getHistoricalData };
+module.exports = { getHistoryData };

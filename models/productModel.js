@@ -1,7 +1,7 @@
 const db = require('../config/db');
 
 // Function that return all product historical 
-async function getHistorical() {
+async function getHistory() {
     const query = ` 
     SELECT 
         h.id,
@@ -27,4 +27,4 @@ async function getHistorical() {
     return rows;
 }
 
-module.exports = {getHistorical}
+module.exports = {getHistory}
