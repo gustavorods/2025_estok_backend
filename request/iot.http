@@ -1,7 +1,8 @@
-POST http://localhost:3000/api/estok/iot/get-epc
+POST http://localhost:3000/api/estok/iot/updateProductHistory
 Content-Type: application/json
-x-api-key: AUTH_KEY
+x-api-key: 123
 
 {
-  "epc": "1242143"
+  "epc": "E200471653F06426899E010C",
+  "status": "saiu"
 }
