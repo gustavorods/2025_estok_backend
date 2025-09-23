@@ -6,8 +6,8 @@ async function getHistoryData(req, res) {
         const data = await productModel.getHistory();
         res.status(200).send(data);
     } catch (error) {
-        console.error(`Error to get product history. ${ERROR}`);
-        res.status(500).send(`Internal server error`);
+        console.error(`Error to get product history. ${error}`);
+        res.status(500).json({ message: "Error getting product history" });
     }
 }
 
