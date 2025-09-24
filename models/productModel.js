@@ -85,5 +85,31 @@ async function updateStatusProduct(epc, status) {
     }
 }
 
-module.exports = { getHistory, updateStatusProduct };
+// Function that returns all expired products that are present on the shelf
+async function getExpiredProduct() {
+    // Query that returns all expired products that are present on the shelf
+    const query = `
+        SELECT 
+        i.cod_item,
+        i.epc_id,
+        p.nome_produto,
+        t.nome_tipo,
+        m.nome_marca,
+        i.validade
+    FROM item i
+    JOIN produto p ON i.cod_produto = p.cod_produto
+    JOIN tipo t ON i.cod_tipo = t.cod_tipo
+    JOIN marca m ON i.cod_marca = m.cod_marca
+    WHERE i.cod_prateleira_status = (
+        SELECT cod_prateleira_status 
+        FROM prateleira_status 
+        WHERE nome_prateleira_status = 'presente'
+    )
+    AND i.validade < CURDATE();
+    `;
 
+    const[rows] = await db.execute(query);
+    return rows;
+}
+
+module.exports = { getHistory, updateStatusProduct, getExpiredProduct };
