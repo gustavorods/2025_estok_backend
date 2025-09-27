@@ -85,31 +85,29 @@ async function updateStatusProduct(epc, status) {
     }
 }
 
-// Function that returns all expired products that are present on the shelf
-async function getExpiredProduct() {
-    // Query that returns all expired products that are present on the shelf
+// Function that return all the products 
+async function getAllProducts() {
     const query = `
-        SELECT 
-        i.cod_item,
-        i.epc_id,
-        p.nome_produto,
-        t.nome_tipo,
-        m.nome_marca,
+    SELECT 
+        p.nome_produto AS produto,
+        t.nome_tipo AS tipo,
+        m.nome_marca AS marca,
+        p.quantidade_maxima AS qtd_max,
+        COUNT(i.cod_item) OVER (
+            PARTITION BY p.cod_produto, t.cod_tipo, m.cod_marca
+        ) AS qtd_atual,
         i.validade
     FROM item i
     JOIN produto p ON i.cod_produto = p.cod_produto
     JOIN tipo t ON i.cod_tipo = t.cod_tipo
     JOIN marca m ON i.cod_marca = m.cod_marca
-    WHERE i.cod_prateleira_status = (
-        SELECT cod_prateleira_status 
-        FROM prateleira_status 
-        WHERE nome_prateleira_status = 'presente'
-    )
-    AND i.validade < CURDATE();
+    JOIN prateleira_status ps ON i.cod_prateleira_status = ps.cod_prateleira_status
+    WHERE ps.nome_prateleira_status = 'presente';
+
     `;
 
     const[rows] = await db.execute(query);
     return rows;
 }
 
-module.exports = { getHistory, updateStatusProduct, getExpiredProduct };
+ module.exports = { getHistory, updateStatusProduct, getAllProducts };

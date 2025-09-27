@@ -3,7 +3,7 @@ GET http://localhost:3000/api/estok/product/get-history
 Content-Type: application/json
 x-api-key: 123
 
-### Test 2 - Get all expired products
-GET http://localhost:3000/api/estok/product/get-expired-product
+### Test 2 - Get all product status
+GET http://localhost:3000/api/estok/product/get-product-status
 Content-Type: application/json
 x-api-key: 123
