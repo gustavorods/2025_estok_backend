@@ -1,8 +1,9 @@
+## Test 1 - update product history
 POST http://localhost:3000/api/estok/iot/updateProductHistory
 Content-Type: application/json
 x-api-key: 123
 
 {
   "epc": "E200471653F06426899E010C",
-  "status": "saiu"
+  "status": "entrou"
 }
