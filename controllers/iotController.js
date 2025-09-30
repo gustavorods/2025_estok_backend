@@ -1,5 +1,5 @@
 const productModel = require('../models/productModel');
-
+const { broadcast } = require ('../services/socketService');
 
 // Displays the IoT EPC in the console (Just for test)
 /*
@@ -22,8 +22,9 @@ async function updateHistory(req, res) {
     try {
         const {epc, status} = req.body;
         await productModel.updateStatusProduct(epc, status);
-        res.status(200).send(`Product status updated successfully`);
-    } catch (error) {
+        broadcast(); // Notifies the Front-end that something has changed
+        res.status(200).json({message: 'Product status updated successfully'});
+    } catch (error) {   
         console.log(`Error to get product history. ${error}`);
         res.status(500).json({ message: "Error updating product history" }); 
     } 

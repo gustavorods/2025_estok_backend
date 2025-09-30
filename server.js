@@ -1,6 +1,20 @@
+require('dotenv').config()
+const http = require('http');
 const express = require('express');
 const app = express();
-require('dotenv').config()
+const cors = require('cors');
+const { initWebSocket } = require('./services/socketService');
+
+
+// Allows any origin (for development only)
+// app.use(cors());
+
+// or, to allow only its front:
+app.use(cors({
+    origin: 'http://127.0.0.1:5500',
+    methods: ['GET','POST','PUT','DELETE'],
+    allowedHeaders: ['Content-Type','x-api-key']
+}));
 
 const port = process.env.PORT;
 
@@ -16,7 +30,13 @@ const auth = require('./middlewares/auth');
 app.use('/api/estok/iot', auth.checkApiKey, iotRoutes);
 app.use('/api/estok/product', auth.checkApiKey, productRoutes);
 
+// Make a HTTP server with express
+const server = http.createServer(app);
+
+// Initializes the WebSocket passing the HTTP server
+initWebSocket(server);
+
 // see server logs
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`App is running in http://localhost:${port}`);
 });

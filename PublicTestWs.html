@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico de Produtos</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        #history {
+            width: 100%;
+            max-width: 900px;
+            border-collapse: collapse;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #history th, #history td {
+            padding: 12px 20px;
+            text-align: left;
+        }
+
+        #history th {
+            background-color: #007bff;
+            color: white;
+            font-weight: 600;
+        }
+
+        #history tr:nth-child(even) {
+            background-color: #f7f7f7;
+        }
+
+        #history tr:hover {
+            background-color: #e1f0ff;
+            transition: 0.2s;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .entrou {
+            background-color: #28a745;
+        }
+
+        .saiu {
+            background-color: #dc3545;
+        }
+
+        .atualizado {
+            margin-top: 15px;
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Histórico de Produtos</h1>
+    <table id="history">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Horário</th>
+                <th>Status</th>
+                <th>EPC ID</th>
+                <th>Produto</th>
+                <th>Tipo</th>
+                <th>Marca</th>
+                <th>Validade</th>
+                <th>Quantidade</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div class="atualizado" id="atualizado"></div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api/estok/product/get-history';
+        const API_KEY = '123';
+
+        const tbody = document.querySelector('#history tbody');
+        const atualizadoDiv = document.getElementById('atualizado');
+
+        // Função para formatar data
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+        }
+
+        // Função para criar uma linha da tabela
+        function createRow(product) {
+            const tr = document.createElement('tr');
+
+            tr.innerHTML = `
+                <td>${product.id}</td>
+                <td>${formatDate(product.horario_alteracao)}</td>
+                <td><span class="status ${product.nome_status.toLowerCase()}">${product.nome_status}</span></td>
+                <td>${product.epc_id}</td>
+                <td>${product.nome_produto}</td>
+                <td>${product.nome_tipo}</td>
+                <td>${product.nome_marca}</td>
+                <td>${formatDate(product.validade)}</td>
+                <td>${product.quantidade}</td>
+            `;
+            return tr;
+        }
+
+        // Função para atualizar a tabela
+        async function updateHistory() {
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': API_KEY
+                    }
+                });
+                const data = await res.json();
+
+                tbody.innerHTML = '';
+                data.forEach(product => {
+                    tbody.appendChild(createRow(product));
+                });
+
+                atualizadoDiv.textContent = `Última atualização: ${new Date().toLocaleTimeString()}`;
+            } catch (err) {
+                console.error('Erro ao buscar histórico:', err);
+            }
+        }
+
+        // Inicializa WebSocket
+        const socket = new WebSocket(`ws://localhost:3000`);
+        
+        socket.onopen = () => {
+            console.log('WebSocket conectado!');
+        };
+
+        socket.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+            console.log('Mensagem WS:', msg);
+            if (msg.type === 'PRODUCTS_CHANGED') {
+                console.log('Produtos alterados! Atualizando tabela...');
+                updateHistory();
+            }
+        };
+
+        socket.onclose = () => {
+            console.log('WebSocket desconectado!');
+        };
+
+        // Primeiro carregamento
+        updateHistory();
+    </script>
+</body>
+</html>

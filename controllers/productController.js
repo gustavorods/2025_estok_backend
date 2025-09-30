@@ -4,7 +4,7 @@ const productModel = require('../models/productModel');
 async function getHistoryData(req, res) {
     try{
         const data = await productModel.getHistory();
-        res.status(200).send(data);
+        res.status(200).json(data);
     } catch (error) {
         console.error(`Error to get product history. ${error}`);
         res.status(500).json({ message: 'Error getting product history.' });
@@ -39,7 +39,7 @@ async function getProductStatus(req, res) {
         const productsSummarized = summarizeStockStatus(statusProduct)
 
         // Server response
-        res.status(200).send(productsSummarized)
+        res.status(200).json(productsSummarized)
     } catch (error) {
         console.log(`Error to get product status. ${error.message}`);
         res.status(500).json({message: "Error to get product status."});
