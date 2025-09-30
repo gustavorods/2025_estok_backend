@@ -16,7 +16,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type','x-api-key']
 }));
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 // Allow recive JSON
 app.use(express.json());
