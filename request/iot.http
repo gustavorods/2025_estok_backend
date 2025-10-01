@@ -1,7 +1,7 @@
 ## Test 1 - update product history
-POST http://localhost:3000/api/estok/iot/updateProductHistory
+POST https://two025-estok-backend.onrender.com/api/estok/iot/updateProductHistory
 Content-Type: application/json
-x-api-key: 123
+x-api-key: 
 
 {
   "epc": "E200471653F06426899E010C",

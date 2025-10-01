@@ -38,5 +38,5 @@ initWebSocket(server);
 
 // see server logs
 server.listen(port, () => {
-    console.log(`App is running in http://localhost:${port}`);
+    console.log(`App is running in ${process.env.API_URL || 3000}`);
 });
