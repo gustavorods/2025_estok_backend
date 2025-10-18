@@ -1,6 +1,6 @@
 const sendEmail = require('../services/emailService')
 
-async function welcomoEmployee(name, email, password) {   
+async function welcomeEmployee(name, email, password) {   
     // Taking the current year
     const currentYear = new Date().getFullYear();
     
@@ -118,3 +118,5 @@ async function welcomoEmployee(name, email, password) {
         message: "Welcome email sent"
     };
 }
+
+module.exports = welcomeEmployee ;

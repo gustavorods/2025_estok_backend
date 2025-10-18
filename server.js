@@ -24,11 +24,13 @@ app.use(express.json());
 // import routes 
 const iotRoutes = require('./routes/iotRoutes');
 const productRoutes = require('./routes/productRoutes');
+const employeeRoutes = require('./routes/employeeRoutes');
 const auth = require('./middlewares/auth');
 
 // Using router
 app.use('/api/estok/iot', auth.checkApiKey, iotRoutes);
 app.use('/api/estok/product', auth.checkApiKey, productRoutes);
+app.use('/api/estok/employee', auth.checkApiKey, employeeRoutes);
 
 // Make a HTTP server with express
 const server = http.createServer(app);
@@ -38,5 +40,5 @@ initWebSocket(server);
 
 // see server logs
 server.listen(port, () => {
-    console.log(`App is running in ${process.env.API_URL || 3000}`);
+    console.log(`App is running in ${process.env.API_URL || "localhost:"+port}`);
 });

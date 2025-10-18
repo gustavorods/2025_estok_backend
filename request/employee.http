@@ -1,0 +1,10 @@
+## Test 1 - update product history
+POST https://two025-estok-backend.onrender.com/api/estok/employee/create-employee
+Content-Type: application/json
+x-api-key: 
+
+{
+  "name": "gustavo",
+  "email": "gustavo.rlsilva07@gmail.com",
+  "gender_name": "Masculino"
+}

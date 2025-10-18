@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require('../database/db');
 
 // Function that returns the full product history
 async function getHistory() {
