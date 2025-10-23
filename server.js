@@ -41,6 +41,10 @@ const server = http.createServer(app);
 initWebSocket(server);
 
 // see server logs
-server.listen(port, () => {
-    console.log(`App is running in ${process.env.API_URL || "localhost:"+port}`);
-});
+if(process.env.NODE_ENV !== "test") {
+    server.listen(port, () => {
+        console.log(`App is running in localhost:${port}`);
+    });
+}
+
+module.exports = {server};

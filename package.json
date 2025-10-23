@@ -15,8 +15,11 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test jest",
     "start": "node server.js"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -26,5 +29,9 @@
     "mysql2": "^3.15.0",
     "nodemailer": "^7.0.9",
     "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4"
   }
 }
