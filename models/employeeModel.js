@@ -11,4 +11,10 @@ async function insertEmployee(name, email, passwordHash, genderCod) {
   return result;
 }
 
-module.exports = { insertEmployee };
+async function getEmployees() {
+  const selectQuery = 'SELECT * FROM funcionario';
+  const [rows] = await db.execute(selectQuery);
+  return rows;
+}
+
+module.exports = { insertEmployee, getEmployees };

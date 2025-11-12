@@ -1,5 +1,5 @@
 // controllers/employeeController.js
-const { insertEmployee } = require('../models/employeeModel');
+const { insertEmployee, getEmployees } = require('../models/employeeModel');
 const queryHelpers = require('../database/queryHelpers');
 const isValidEmail = require('../utils/validators/email');
 const isValidPassword = require('../utils/validators/password');
@@ -63,4 +63,14 @@ async function createEmployee(req, res) {
   }
 }
 
-module.exports = { createEmployee };
+async function getAllEmployees(req, res) {
+  try {
+    const employees = await getEmployees();
+    return res.status(200).json({ status: true, data: employees });
+  } catch (error) {
+    console.error('[GetEmployees Error]', error);
+    return res.status(500).json({ status: false, message: 'Internal server error' });
+  }
+}
+
+module.exports = { createEmployee, getAllEmployees};
