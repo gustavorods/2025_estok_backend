@@ -1,16 +1,66 @@
-const employeeModel = require('../models/employeeModel');
+// controllers/employeeController.js
+const { insertEmployee } = require('../models/employeeModel');
+const queryHelpers = require('../database/queryHelpers');
+const isValidEmail = require('../utils/validators/email');
+const isValidPassword = require('../utils/validators/password');
+const hashPassword = require('../utils/hashPassword');
 
-// controller function to create employee
+
 async function createEmployee(req, res) {
-    const {name, email, gender_name} = req.body;
+  try {
+    const { name, email, gender_name, password } = req.body;
 
-    const result = await employeeModel.createEmployee(name, email, gender_name);
+    // ----------------------------
+    // Basic validations
+    // ----------------------------
+    if (!name) return res.status(400).json({ status: false, message: 'Name is required' });
+    if (!email) return res.status(400).json({ status: false, message: 'Email is required' });
+    if (!password) return res.status(400).json({ status: false, message: 'Password is required' });
 
-    if (result.status) {
-        return res.status(201).json({ message: result.message });
-    } else {
-        return res.status(500).json({ message: result.message });
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ status: false, message: 'Invalid email format' });
     }
+
+    if (!isValidPassword(password)) {
+      return res.status(400).json({ status: false, message: 'Password does not meet security requirements' });
+    }
+
+    // ----------------------------
+    // Get gender code
+    // ----------------------------
+    const genderCod = await queryHelpers.getGenderCodeByName(gender_name);
+    if (genderCod == null) {
+      return res.status(400).json({ status: false, message: 'Invalid gender name' });
+    }
+
+    // ----------------------------
+    // Hash password
+    // ----------------------------
+    const passwordHash = await hashPassword(password);
+
+    // ----------------------------
+    // Insert employee
+    // ----------------------------
+    const result = await insertEmployee(name, email, passwordHash, genderCod);
+
+    // Success
+    return res.status(201).json({
+      status: true,
+      message: 'Employee created successfully',
+      id: result.insertId || null
+    });
+
+  } catch (error) {
+    // ----------------------------
+    // Handle duplicate email error
+    // ----------------------------
+    if (error.code === 'ER_DUP_ENTRY' || error.errno === 1062) {
+      return res.status(409).json({ status: false, message: 'Email already in use' });
+    }
+
+    console.error('[CreateEmployee Error]', error);
+    return res.status(500).json({ status: false, message: 'Internal server error' });
+  }
 }
 
 module.exports = { createEmployee };
