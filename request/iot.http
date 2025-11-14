@@ -2,6 +2,8 @@
 POST https://two025-estok-backend.onrender.com/api/estok/iot/updateProductHistory
 Content-Type: application/json
 x-api-key: 
+Authorization: Bearer token
+
 
 {
   "epc": "E200471653F06426899E010C",

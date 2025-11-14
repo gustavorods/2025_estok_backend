@@ -2,8 +2,11 @@
 GET https://two025-estok-backend.onrender.com/api/estok/product/get-history
 Content-Type: application/json
 x-api-key: 
+Authorization: Bearer token
+
 
 ### Test 2 - Get all product status
 GET https://two025-estok-backend.onrender.com/api/estok/product/get-product-status
 Content-Type: application/json
 x-api-key: 
+Authorization: Bearer token

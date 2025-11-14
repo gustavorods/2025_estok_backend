@@ -2,6 +2,8 @@
 POST https://two025-estok-backend.onrender.com/api/estok/employee/create-employee
 Content-Type: application/json
 x-api-key: 
+Authorization: Bearer token
+
 
 {
   "name": "",
@@ -14,3 +16,5 @@ x-api-key:
 GET https://two025-estok-backend.onrender.com/api/estok/employee/get-employees
 Content-Type: application/json
 x-api-key: 
+Authorization: Bearer token
+
