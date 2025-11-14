@@ -27,12 +27,15 @@ app.use(express.json());
 const iotRoutes = require('./routes/iotRoutes');
 const productRoutes = require('./routes/productRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
-const auth = require('./middlewares/auth');
+const authkey = require('./middlewares/auth');
+const jwtAuth = require('./middlewares/jwtAuth');
+const authRoutes = require('./routes/authRoutes');
 
 // Using router
-app.use('/api/estok/iot', auth.checkApiKey, iotRoutes);
-app.use('/api/estok/product', auth.checkApiKey, productRoutes);
-app.use('/api/estok/employee', auth.checkApiKey, employeeRoutes);
+app.use('/api/estok/iot', authkey.checkApiKey, jwtAuth, iotRoutes);
+app.use('/api/estok/product', authkey.checkApiKey, jwtAuth, productRoutes);
+app.use('/api/estok/employee', authkey.checkApiKey, jwtAuth, employeeRoutes);
+app.use('/api/estok/auth', authkey.checkApiKey, authRoutes);
 
 // Make a HTTP server with express
 const server = http.createServer(app);

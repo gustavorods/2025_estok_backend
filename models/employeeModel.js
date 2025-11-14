@@ -17,4 +17,10 @@ async function getEmployees() {
   return rows;
 }
 
-module.exports = { insertEmployee, getEmployees };
+async function getEmployeeByEmail(email) {
+  const selectQuery = 'SELECT * FROM funcionario WHERE email = ?';
+  const [rows] = await db.execute(selectQuery, [email]);
+  return rows[0];
+}
+
+module.exports = { insertEmployee, getEmployees, getEmployeeByEmail};
