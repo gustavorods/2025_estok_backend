@@ -32,7 +32,7 @@ const jwtAuth = require('./middlewares/jwtAuth');
 const authRoutes = require('./routes/authRoutes');
 
 // Using router
-app.use('/api/estok/iot', authkey.checkApiKey, jwtAuth, iotRoutes);
+app.use('/api/estok/iot', authkey.checkApiKey, iotRoutes);
 app.use('/api/estok/product', authkey.checkApiKey, jwtAuth, productRoutes);
 app.use('/api/estok/employee', authkey.checkApiKey, jwtAuth, employeeRoutes);
 app.use('/api/estok/auth', authkey.checkApiKey, authRoutes);
