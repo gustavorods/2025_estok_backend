@@ -41,7 +41,7 @@ After cloning the project, navigate into the project folder and run:
 npm install
 ```
 
-### 2 configure - .env
+### 2 - configure - .env
 After downloading the dependencies, configure the `.env` file using `.env.example` as a template.
 
 ### 3 - Run project
